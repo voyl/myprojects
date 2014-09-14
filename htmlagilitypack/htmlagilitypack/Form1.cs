@@ -179,9 +179,39 @@ namespace htmlagilitypack
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            while (true)
+            {
+                foreach (HtmlElement el in webBrowser1.Document.GetElementsByTagName("button"))
+                {
+                    if (el.InnerText.Contains("takip et ve devam et"))
+                    {
+                        el.InvokeMember("click");
+                        break;
+                    }
+                }
+                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                    Application.DoEvents();
+                webBrowser1.Navigate("https://twitter.com/i/start/follow_interests?sul=-1");
+                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                    Application.DoEvents();
+            }
         }
-
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            sec--;
+        }
+        int sec = 5;
+        private void wait()
+        {
+            timer1.Enabled = true;
+            do
+            {
+                Application.DoEvents();
+            }
+            while (sec > 1);
+            sec = 5;
+            timer1.Enabled = false;
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
