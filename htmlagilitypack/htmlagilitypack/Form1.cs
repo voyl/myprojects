@@ -179,6 +179,7 @@ namespace htmlagilitypack
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //https://twitter.com/i/start/follow_interests?sul=-1
             while (true)
             {
                 foreach (HtmlElement el in webBrowser1.Document.GetElementsByTagName("button"))
@@ -215,6 +216,11 @@ namespace htmlagilitypack
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(webBrowser1.DocumentText);
         }
     }
 }
