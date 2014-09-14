@@ -118,7 +118,6 @@ namespace htmlagilitypack
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            //
             string[] a = System.IO.File.ReadAllLines("linkler.txt");
             int satir = 1, sutun = 1;
             var fileName = "emlaknet.xlsx";
