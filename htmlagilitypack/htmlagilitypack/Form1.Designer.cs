@@ -104,7 +104,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(321, 46);
+            this.button4.Location = new System.Drawing.Point(34, 329);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(189, 92);
             this.button4.TabIndex = 6;
@@ -114,12 +114,12 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(528, 12);
+            this.webBrowser1.Location = new System.Drawing.Point(254, 12);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(501, 484);
+            this.webBrowser1.Size = new System.Drawing.Size(775, 484);
             this.webBrowser1.TabIndex = 7;
-            this.webBrowser1.Url = new System.Uri("http://www.biography.com/news/lonnie-g-johnson-super-soaker-inventor", System.UriKind.Absolute);
+            this.webBrowser1.Url = new System.Uri("https://twitter.com/i/start/follow_interests?sul=-1", System.UriKind.Absolute);
             // 
             // Form1
             // 
