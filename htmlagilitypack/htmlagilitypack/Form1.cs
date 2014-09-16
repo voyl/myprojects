@@ -229,6 +229,7 @@ namespace htmlagilitypack
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            new ToolTip().SetToolTip(label2, "Sayfalar Arası Geçiş Süresi.\nİnternetiniz Yavaşsa Birkaç Saniye Arttırın.");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -261,6 +262,9 @@ namespace htmlagilitypack
             webBrowser1.Document.GetElementById("firmaname").SetAttribute("value", "golbasim");
             webBrowser1.Document.GetElementById("firmapass").SetAttribute("value", "golbasim02");
             webBrowser1.Document.GetElementById("loginf").InvokeMember("click");
+            wait();
+            while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                Application.DoEvents();
             for(int i = Convert.ToInt16(textBox2.Text);i<=Convert.ToInt16(textBox3.Text);i++)
             {
                 this.Text = i.ToString();
@@ -312,6 +316,25 @@ namespace htmlagilitypack
         private void button6_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (webBrowser1.ReadyState == WebBrowserReadyState.Complete)
+            {
+                button5.Enabled = true;
+                timer2.Enabled = false;
+            }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                sec = Convert.ToInt16(textBox4.Text);
+                label3.Text = "Şuan: "+textBox4.Text;
+            }
+            catch { }
         }
     }
 }
