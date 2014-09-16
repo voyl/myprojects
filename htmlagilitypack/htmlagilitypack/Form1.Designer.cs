@@ -52,23 +52,9 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j",
-            "k",
-            "l",
-            "m"});
-            this.listBox1.Location = new System.Drawing.Point(1071, 438);
+            this.listBox1.Location = new System.Drawing.Point(1021, 406);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(61, 82);
+            this.listBox1.Size = new System.Drawing.Size(87, 95);
             this.listBox1.TabIndex = 1;
             // 
             // button2
@@ -114,10 +100,10 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(254, 12);
+            this.webBrowser1.Location = new System.Drawing.Point(271, 27);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(775, 484);
+            this.webBrowser1.Size = new System.Drawing.Size(681, 449);
             this.webBrowser1.TabIndex = 7;
             this.webBrowser1.Url = new System.Uri("https://twitter.com/i/start/follow_interests?sul=-1", System.UriKind.Absolute);
             // 

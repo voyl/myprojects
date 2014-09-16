@@ -1,4 +1,6 @@
-﻿using OfficeOpenXml;
+﻿using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -116,6 +118,16 @@ namespace htmlagilitypack
             }
             return src;
         }
+        private string getSite1254(string url)
+        {
+            string src = "";
+            using (WebClient wb = new WebClient())
+            {
+                wb.Encoding = Encoding.GetEncoding("windows-1254");
+                src = wb.DownloadString(url);
+            }
+            return src;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             //TEST
@@ -220,7 +232,28 @@ namespace htmlagilitypack
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(webBrowser1.DocumentText);
+            int say = 0;
+            string s = getSite1254("http://imoistanbul.org/imoarsiv/isArayanlar.htm");
+            string[] s1 = s.Split(new string[] { "<a target=\"_blank\" href=\"" }, StringSplitOptions.None);
+            for (int i = 1; i < s1.Length; i++)
+            {
+                string[] s2 = s1[i].Split('"');
+                PdfReader reader = new PdfReader("http://imoistanbul.org/imoarsiv/" + s2[0]);
+                string text = string.Empty;
+                for (int page = 1; page <= reader.NumberOfPages; page++)
+                {
+                    text += PdfTextExtractor.GetTextFromPage(reader, page);
+                }
+                reader.Close();
+                Regex r = new Regex(@"[a-zA-z0-9\.]+@[a-zA-z0-9\.]+\.[A-Za-z]+");
+                Match m = r.Match(text);
+                if (m.Success)
+                {
+                    say++;
+                    this.Text = say.ToString();
+                    listBox1.Items.Add(m.Value);
+                }
+            }
         }
     }
 }
