@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -254,6 +255,63 @@ namespace htmlagilitypack
                     listBox1.Items.Add(m.Value);
                 }
             }
+        }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Document.GetElementById("firmaname").SetAttribute("value", "golbasim");
+            webBrowser1.Document.GetElementById("firmapass").SetAttribute("value", "golbasim02");
+            webBrowser1.Document.GetElementById("loginf").InvokeMember("click");
+            for(int i = Convert.ToInt16(textBox2.Text);i<=Convert.ToInt16(textBox3.Text);i++)
+            {
+                this.Text = i.ToString();
+                webBrowser1.Navigate("http://www.insaatim.com/index.php?pid=kdetay&user=" + i);
+                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                    Application.DoEvents();
+                string a = webBrowser1.DocumentText;
+                string ceptel="", tel="", faks="", eposta = "";
+                string[] a1 = a.Split(new string[] { "<td class=\"ilktd\">E-posta Adresi</td>" }, StringSplitOptions.None);
+                string[] a2 = a1[1].Split('>');
+                string[] a3 = a2[3].Split('<');
+                if (a3[0] != "")
+                    eposta = a3[0].Trim();
+
+                string[] a4 = a.Split(new string[] { "<td class=\"ilktd\">Cep Telefonu</td>" }, StringSplitOptions.None);
+                string[] a5 = a4[1].Split('>');
+                string[] a6 = a5[3].Split('<');
+                if (a6[0] != "")
+                    ceptel = a6[0].Trim();
+
+                string[] a7 = a.Split(new string[] { "<td class=\"ilktd\">Telefon</td>" }, StringSplitOptions.None);
+                string[] a8 = a7[1].Split('>');
+                string[] a9 = a8[3].Split('<');
+                if (a3[0] != "")
+                    tel = a9[0].Trim();
+
+                string[] a10 = a.Split(new string[] { "<td class=\"ilktd\">Faks</td>" }, StringSplitOptions.None);
+                string[] a11 = a10[1].Split('>');
+                string[] a12 = a11[3].Split('<');
+                if (a3[0] != "")
+                    eposta = a3[0].Trim();
+
+                if (eposta != "" || ceptel != "" || tel != "" || faks != "")
+                {
+                    string add ="";
+                    if (eposta != "")
+                        add = eposta;
+                    if (ceptel != "")
+                        add += " - " + ceptel;
+                    if (tel != "")
+                        add += " - " + tel;
+                    if (faks != "")
+                        add += " - " + faks;
+                    listBox1.Items.Add(add);
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
