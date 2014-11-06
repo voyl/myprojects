@@ -1,5 +1,5 @@
-﻿using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
+﻿//using iTextSharp.text.pdf;
+//using iTextSharp.text.pdf.parser;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,6 @@ namespace htmlagilitypack
         }
         private void emlakjet()
         {
-            int oksay = 0;
             int satir = 1, sutun = 1;
             var fileName = "emlakjet.xlsx";
             var file = new FileInfo(Application.StartupPath + "\\" + fileName);
@@ -230,11 +229,12 @@ namespace htmlagilitypack
         {
             CheckForIllegalCrossThreadCalls = false;
             new ToolTip().SetToolTip(label2, "Sayfalar Arası Geçiş Süresi.\nİnternetiniz Yavaşsa Birkaç Saniye Arttırın.");
+            textBox5.Text = "cikti-"+DateTime.Now.ToString().Replace(':','-').Replace(' ','_');
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            int say = 0;
+            /*int say = 0;
             string s = getSite1254("http://imoistanbul.org/imoarsiv/isArayanlar.htm");
             string[] s1 = s.Split(new string[] { "<a target=\"_blank\" href=\"" }, StringSplitOptions.None);
             for (int i = 1; i < s1.Length; i++)
@@ -255,62 +255,77 @@ namespace htmlagilitypack
                     this.Text = say.ToString();
                     listBox1.Items.Add(m.Value);
                 }
-            }
+            }*/
         }
         private void button5_Click(object sender, EventArgs e)
         {
+            listBox1.Items.Clear();
             webBrowser1.Document.GetElementById("firmaname").SetAttribute("value", "golbasim");
             webBrowser1.Document.GetElementById("firmapass").SetAttribute("value", "golbasim02");
             webBrowser1.Document.GetElementById("loginf").InvokeMember("click");
             wait();
             while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
                 Application.DoEvents();
-            for(int i = Convert.ToInt16(textBox2.Text);i<=Convert.ToInt16(textBox3.Text);i++)
+            int satir = 1, sutun = 1;
+            var fileName = textBox5.Text+".xlsx";
+            var file = new FileInfo(Application.StartupPath + "\\" + fileName);
+            using (var package = new ExcelPackage(file))
             {
-                this.Text = i.ToString();
-                webBrowser1.Navigate("http://www.insaatim.com/index.php?pid=kdetay&user=" + i);
-                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
-                    Application.DoEvents();
-                string a = webBrowser1.DocumentText;
-                string ceptel="", tel="", faks="", eposta = "";
-                string[] a1 = a.Split(new string[] { "<td class=\"ilktd\">E-posta Adresi</td>" }, StringSplitOptions.None);
-                string[] a2 = a1[1].Split('>');
-                string[] a3 = a2[3].Split('<');
-                if (a3[0] != "")
-                    eposta = a3[0].Trim();
-
-                string[] a4 = a.Split(new string[] { "<td class=\"ilktd\">Cep Telefonu</td>" }, StringSplitOptions.None);
-                string[] a5 = a4[1].Split('>');
-                string[] a6 = a5[3].Split('<');
-                if (a6[0] != "")
-                    ceptel = a6[0].Trim();
-
-                string[] a7 = a.Split(new string[] { "<td class=\"ilktd\">Telefon</td>" }, StringSplitOptions.None);
-                string[] a8 = a7[1].Split('>');
-                string[] a9 = a8[3].Split('<');
-                if (a3[0] != "")
-                    tel = a9[0].Trim();
-
-                string[] a10 = a.Split(new string[] { "<td class=\"ilktd\">Faks</td>" }, StringSplitOptions.None);
-                string[] a11 = a10[1].Split('>');
-                string[] a12 = a11[3].Split('<');
-                if (a3[0] != "")
-                    eposta = a3[0].Trim();
-
-                if (eposta != "" || ceptel != "" || tel != "" || faks != "")
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sayfa1");
+                worksheet.Cells[1, 1].Value = "Eposta";
+                worksheet.Cells[1, 2].Value = "Cep Telefon";
+                worksheet.Cells[1, 3].Value = "Telefon";
+                worksheet.Cells[1, 4].Value = "Faks";
+                for (int i = Convert.ToInt32(textBox2.Text); i <= Convert.ToInt32(textBox3.Text); i++)
                 {
-                    string add ="";
-                    if (eposta != "")
-                        add = eposta;
-                    if (ceptel != "")
-                        add += " - " + ceptel;
-                    if (tel != "")
-                        add += " - " + tel;
-                    if (faks != "")
-                        add += " - " + faks;
-                    listBox1.Items.Add(add);
+                    this.Text = i.ToString();
+                    webBrowser1.Navigate("http://www.insaatim.com/index.php?pid=kdetay&user=" + i);
+                    wait();
+                    while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                        Application.DoEvents();
+                    string a = webBrowser1.DocumentText;
+                    string ceptel = "", tel = "", faks = "", eposta = "";
+                    string[] a1 = a.Split(new string[] { "<td class=\"ilktd\">E-posta Adresi</td>" }, StringSplitOptions.None);
+                    string[] a2 = a1[1].Split('>');
+                    string[] a3 = a2[3].Split('<');
+                    if (a3[0] != "")
+                        eposta = a3[0].Trim();
+
+                    string[] a4 = a.Split(new string[] { "<td class=\"ilktd\">Cep Telefonu</td>" }, StringSplitOptions.None);
+                    string[] a5 = a4[1].Split('>');
+                    string[] a6 = a5[3].Split('<');
+                    if (a6[0] != "")
+                        ceptel = a6[0].Trim();
+
+                    string[] a7 = a.Split(new string[] { "<td class=\"ilktd\">Telefon</td>" }, StringSplitOptions.None);
+                    string[] a8 = a7[1].Split('>');
+                    string[] a9 = a8[3].Split('<');
+                    if (a3[0] != "")
+                        tel = a9[0].Trim();
+
+                    string[] a10 = a.Split(new string[] { "<td class=\"ilktd\">Faks</td>" }, StringSplitOptions.None);
+                    string[] a11 = a10[1].Split('>');
+                    string[] a12 = a11[3].Split('<');
+                    if (a3[0] != "")
+                        eposta = a3[0].Trim();
+
+                    if (eposta != "" || ceptel != "" || tel != "" || faks != "")
+                    {
+                        satir++; sutun = 1;
+                        worksheet.Cells[satir, sutun].Value = eposta;
+                        sutun++;
+                        worksheet.Cells[satir, sutun].Value = ceptel;
+                        sutun++;
+                        worksheet.Cells[satir, sutun].Value = tel;
+                        sutun++;
+                        worksheet.Cells[satir, sutun].Value = faks;
+                        sutun++;
+                        listBox1.Items.Add(eposta+" - "+ceptel+" - "+tel+" - "+faks);
+                    }
                 }
+                package.Save();
             }
+            MessageBox.Show("Bitti.");
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -335,6 +350,11 @@ namespace htmlagilitypack
                 label3.Text = "Şuan: "+textBox4.Text;
             }
             catch { }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
