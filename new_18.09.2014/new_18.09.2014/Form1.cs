@@ -78,11 +78,14 @@ namespace new_18._09._2014
                     continue;
                 if (!wb.DocumentText.Contains("<span class=\"videoHeaderTitle\""))
                     continue;
+                
                 string[] vname = wb.DocumentText.Split(new string[] { "<span class=\"videoHeaderTitle\" style=\"font-size:24px\">" }, StringSplitOptions.None);
                 string[] vname1 = vname[1].Split(new string[] { "</span>" }, StringSplitOptions.None);
                 videoName = vname1[0];
                 string[] a = wb.DocumentText.Split(new string[] { "url%3D" }, StringSplitOptions.None);
                 string[] b = a[1].Split(new string[] { "%26" }, StringSplitOptions.None);
+                if (b[0].Equals("") || b[0].Equals(null))
+                    continue;
                 downloadFile(b[0].Replace("%253A", ":").Replace("%252F", "/").Replace("%253F", "?").Replace("%253D", "="));
             }
             toolStripStatusLabel2.Text = "Tüm Videolar İndirildi..";
@@ -113,6 +116,10 @@ namespace new_18._09._2014
             wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
             sw.Start();
             wc.Headers.Add(HttpRequestHeader.Cookie, cc);
+            wc.OpenRead(new Uri(url));
+            Int64 bytes_total = Convert.ToInt64(wc.ResponseHeaders["Content-Length"]);
+            if (bytes_total == 0)
+                return;
             wc.DownloadFileAsync(new Uri(url),videoName+ ".mp4");
             while (wc.IsBusy)
             {
@@ -214,7 +221,8 @@ namespace new_18._09._2014
 
         private void listBox2_DoubleClick(object sender, EventArgs e)
         {
-            listBox1.Items.Add(listBox2.SelectedItem.ToString());
+            Clipboard.SetText(listBox2.SelectedItem.ToString());
+            toolStripStatusLabel2.Text = "Link Kopyalandı.";
         }
 
         private void button6_Click_1(object sender, EventArgs e)
@@ -225,6 +233,34 @@ namespace new_18._09._2014
         private void button7_Click(object sender, EventArgs e)
         {
             listBox2.Items.Clear();
+        }
+
+        private void listBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Clipboard.SetText(listBox1.SelectedItem.ToString());
+            toolStripStatusLabel2.Text = "Link Kopyalandı.";
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            wb.Navigate("http://www.nicovideo.jp/watch/sm24862532");
+            while (wb.ReadyState != WebBrowserReadyState.Complete)
+                Application.DoEvents();
+
+           /* if (wb.DocumentText.Contains("This video is not available in your country"))
+                continue;
+            if (!wb.DocumentText.Contains("<span class=\"videoHeaderTitle\""))
+                continue;*/
+
+            string[] vname = wb.DocumentText.Split(new string[] { "<span class=\"videoHeaderTitle\" style=\"font-size:24px\">" }, StringSplitOptions.None);
+            string[] vname1 = vname[1].Split(new string[] { "</span>" }, StringSplitOptions.None);
+            videoName = vname1[0];
+            string[] a = wb.DocumentText.Split(new string[] { "url%3D" }, StringSplitOptions.None);
+            string[] b = a[1].Split(new string[] { "%26" }, StringSplitOptions.None);
+            MessageBox.Show(b[0]);
+            if (b[0].Equals("") || b[0].Equals(null))
+                MessageBox.Show("nop");
+            downloadFile(b[0].Replace("%253A", ":").Replace("%252F", "/").Replace("%253F", "?").Replace("%253D", "="));
         }
     }
 }
